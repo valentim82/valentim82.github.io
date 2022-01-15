@@ -977,10 +977,15 @@ ssSubmit.onclick = async () => {
   
     const simpleNFT = new web3.eth.Contract(nftSABI, nftSAddress)
     simpleNFT.setProvider(window.ethereum)
+	let txStatusDiv = document.getElementById('txStatus');
+    simpleNFT.events['LogStaking']().on('data', function(event){
+	/* event received - to access parameters, use the attribute returnValues */
+	txStatusDiv.innerHTML = event.returnValues.message;
+  });
 
-    //  await simpleStorage.methods.store(ssInputValue).send({from: ethereum.selectedAddress})
-    await simpleNFT.methods.createStake(id).send({from: ethereum.selectedAddress})
-
+  	await simpleNFT.methods.createStake(id).send({from: ethereum.selectedAddress}).then(() => {txStatusDiv.innerHTML = 'Transaction sent, waiting for execution';}).catch(error => {txStatusDiv.innerHTML = 'Transaction failed, please check console';});
+  
+   
   }
   catch(error){
     console.log('error:', error);

@@ -983,18 +983,18 @@ ssSubmit.onclick = async () => {
   // instantiate smart contract instance
   
   const simpleNFT = new web3.eth.Contract(nftSABI, nftSAddress)
-  //console.log("simple NFT.events 1: "+console.log(simpleNFT.events.LogMint));
+  
   simpleNFT.setProvider(window.ethereum)
 	
   let txStatusDiv = document.getElementById('txStatus');
-  //simpleNFT.events['LogMint'].on('data', function(event){
-	// event received - to access parameters, use the attribute returnValues */
-	//txStatusDiv.innerHTML = event.returnValues.message;
-  //});
+  simpleNFT.events['LogMint']().on('data', function(event){
+	/* event received - to access parameters, use the attribute returnValues */
+	txStatusDiv.innerHTML = event.returnValues.message;
+  });
 
   await simpleNFT.methods.mintStaking(name,url,web3.utils.toWei(price, "Ether")).send({from: ethereum.selectedAddress}).then(() => {txStatusDiv.innerHTML = 'Transaction sent, waiting for execution';}).catch(error => {txStatusDiv.innerHTML = 'Transaction failed, please check console';});
   
- // console.log("simple NFT.events 2: "+console.log(simpleNFT.events.LogMint))
+ 
 
 	
 

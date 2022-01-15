@@ -1,7 +1,7 @@
 
 
 // contract address on Ropsten:
-const nftSAddress = '0xBd8a5650b3c025ddE6FB693ef3bd23016ED709a8'
+const nftSAddress = '0x06074104cB6a773DACA68045cB994D3dAE977A70'
 
 // add contract ABI from Remix:
 
@@ -72,6 +72,44 @@ const nftSABI =
 			}
 		],
 		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "nftStakingCounter",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "LogMint",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "tokenOwner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "LogStaking",
 		"type": "event"
 	},
 	{
@@ -869,7 +907,6 @@ const nftSABI =
 		"type": "function"
 	}
 ]
-
 // Using the 'load' event listener for Javascript to
 // check if window.ethereum is available
 

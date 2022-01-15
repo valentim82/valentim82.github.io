@@ -1,7 +1,7 @@
 
 
 // contract address on Ropsten:
-const nftSAddress = '0xBd8a5650b3c025ddE6FB693ef3bd23016ED709a8'
+const nftSAddress = '0x06074104cB6a773DACA68045cB994D3dAE977A70'
 
 // add contract ABI from Remix:
 
@@ -72,6 +72,44 @@ const nftSABI =
 			}
 		],
 		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "nftStakingCounter",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "LogMint",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "tokenOwner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "LogStaking",
 		"type": "event"
 	},
 	{
@@ -869,7 +907,6 @@ const nftSABI =
 		"type": "function"
 	}
 ]
-
 // Using the 'load' event listener for Javascript to
 // check if window.ethereum is available
 
@@ -940,21 +977,27 @@ ssSubmit.onclick = async () => {
   console.log(price)
   const url = document.getElementById('ss-input-url').value;
   console.log(url)
-  try{
-    var web3 = new Web3(window.ethereum)
+ 
+  var web3 = new Web3(window.ethereum)
 
-    // instantiate smart contract instance
+  // instantiate smart contract instance
   
-    const simpleNFT = new web3.eth.Contract(nftSABI, nftSAddress)
-    simpleNFT.setProvider(window.ethereum)
+  const simpleNFT = new web3.eth.Contract(nftSABI, nftSAddress)
+  console.log("simple NFT.events 1: "+console.log(simpleNFT.events.LogMint));
+  simpleNFT.setProvider(window.ethereum)
+	
+  /* let txStatusDiv = document.getElementById('txStatus');
+  simpleNFT.events['LogMint'].on('data', function(event){
+	/* event received - to access parameters, use the attribute returnValues */
+	txStatusDiv.innerHTML = event.returnValues.message;
+  }); */
 
-    //  await simpleStorage.methods.store(ssInputValue).send({from: ethereum.selectedAddress})
-    await simpleNFT.methods.mintStaking(name,url,web3.utils.toWei(price, "Ether")).send({from: ethereum.selectedAddress})
+  await simpleNFT.methods.mintStaking(name,url,web3.utils.toWei(price, "Ether")).send({from: ethereum.selectedAddress}).then(() => {txStatusDiv.innerHTML = 'Transaction sent, waiting for execution';}).catch(error => {txStatusDiv.innerHTML = 'Transaction failed, please check console';});
+  
+ // console.log("simple NFT.events 2: "+console.log(simpleNFT.events.LogMint))
 
-  }
-  catch(error){
-    console.log('error:', error);
-  }
+	
+
 
   
 
